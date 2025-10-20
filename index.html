@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script src="main.js"></script>
+    <div class="saved-cards-panel">
+        <h3>Сохраненные карточки</h3>
+        <div class="saved-cards-container">
+            <!-- Здесь будут появляться сохраненные карточки -->
+        </div>
+        <div class="panel-controls">
+            <button class="clear-all-btn">Удалить все</button>
+        </div>
+    </div>
+    <div class="card-container">
+        <div class="card">
+            <div class="card-face card-front">
+                <div class="textarea-container">
+                    <textarea placeholder="Введите текст..." maxlength="288"></textarea>
+                </div>
+                <div class="card-text-top">Она</div>
+                <div class="card-text-bottom">Но</div>
+            </div>
+            <div class="card-face card-back">
+                <div class="textarea-container">
+                    <textarea placeholder="Введите текст..." maxlength="288"></textarea>
+                </div>
+                <div class="card-text-top">Он</div>
+                <div class="card-text-bottom">Но</div>
+            </div>
+        </div>
+    </div>
+    <button class="save-button">Сохранить карточку</button>
+    <button class="random-card-button">Случайная карточка</button>
+    <div class="hotkey-hint">
+        <strong>Горячие клавиши:</strong><br>
+        <kbd>Enter/S</kbd> - Сохранить карточку<br>
+        <kbd>Пробел/F</kbd> - Повернуть карточку<br>
+        <kbd>R</kbd> - Случайная карточка<br>
+        <kbd>D</kbd> - Удалить все
+    </div>
+    <div class="used-cards-panel">
+        <h3>Использованные карточки</h3>
+        <div class="used-cards-container">
+            <!-- Здесь будут появляться использованные карточки -->
+        </div>
+        <div class="panel-controls">
+            <button class="reset-used-btn">Сбросить использованные</button>
+        </div>
+    </div>
+</body>
+</html>
