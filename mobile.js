@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Сброс изученных
     resetUsedBtn.addEventListener('click', function() {
-        if (confirm('↩️ Сбросить все использованые карточки?')) {
+        if (confirm('↩️ Сбросить все использованные карточки?')) {
             showAllCards();
             usedCards = [];
             usedContainer.innerHTML = '<div class="empty-state"><p>🎯 Пока нет использованных карточек</p><small>Используйте "Случайная карточка"</small></div>';
