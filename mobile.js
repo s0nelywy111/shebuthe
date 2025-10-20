@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (savedCards.length === 0) {
                 alert('📝 Нет сохраненных карточек!');
             } else {
-                alert('✅ Все карточки изучены! Сбросьте изученные или создайте новые.');
+                alert('✅ Все карточки использованы! Сбросьте их или создайте новые.');
             }
             return;
         }
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cardCounter = 0;
             
             savedContainer.innerHTML = '<div class="empty-state"><p>📝 Пока нет сохраненных карточек</p><small>Создайте первую карточку!</small></div>';
-            usedContainer.innerHTML = '<div class="empty-state"><p>🎯 Пока нет изученных карточек</p><small>Используйте "Случайная карточка"</small></div>';
+            usedContainer.innerHTML = '<div class="empty-state"><p>🎯 Пока нет использованных карточек</p><small>Используйте "Случайная карточка"</small></div>';
             
             updateStats();
             randomBtn.disabled = true;
@@ -107,10 +107,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Сброс изученных
     resetUsedBtn.addEventListener('click', function() {
-        if (confirm('↩️ Сбросить все изученные карточки?')) {
+        if (confirm('↩️ Сбросить все использованые карточки?')) {
             showAllCards();
             usedCards = [];
-            usedContainer.innerHTML = '<div class="empty-state"><p>🎯 Пока нет изученных карточек</p><small>Используйте "Случайная карточка"</small></div>';
+            usedContainer.innerHTML = '<div class="empty-state"><p>🎯 Пока нет использованных карточек</p><small>Используйте "Случайная карточка"</small></div>';
             updateStats();
             resetUsedBtn.style.display = 'none';
         }
