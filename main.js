@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const card = document.querySelector('.card');
-    const textareas = document.querySelectorAll('textarea'); // вместо inputs
+    const textareas = document.querySelectorAll('textarea');
     
     // Переворот карточки
     card.addEventListener('click', function() {
@@ -9,54 +9,74 @@ document.addEventListener('DOMContentLoaded', function() {
         // Автоматически фокусируемся на textarea активной стороны
         setTimeout(() => {
             if (this.classList.contains('flipped')) {
-                // Карточка перевернута - фокус на заднюю сторону (голубую)
                 const backTextarea = document.querySelector('.card-back textarea');
                 backTextarea.focus();
             } else {
-                // Карточка лицевой стороной - фокус на переднюю сторону (розовую)
                 const frontTextarea = document.querySelector('.card-front textarea');
                 frontTextarea.focus();
             }
-        }, 100); // небольшая задержка для завершения анимации поворота
+        }, 100);
     });
     
-    // Останавливаем переворот при клике на input
+    // Останавливаем переворот при клике на textarea
     textareas.forEach(textarea => {
         textarea.addEventListener('click', function(event) {
-            event.stopPropagation(); // останавливает всплытие события
+            event.stopPropagation();
         });
     });
     
     // Счетчик символов
     textareas.forEach(textarea => {
         textarea.addEventListener('input', function() {
-            const maxLength = 288;
+            const maxLength = 300;
             const currentLength = this.value.length;
             
             if (currentLength === maxLength) {
-                this.style.borderColor = 'red'
+                this.style.borderColor = 'red';
             } else {
-                this.style.borderColor = '#0984e3';
+                this.style.borderColor = 'white';
             }
         });
     });
     
-    // Функция сохранения карточки
+    // Элементы интерфейса
     const saveButton = document.querySelector('.save-button');
     const savedCardsContainer = document.querySelector('.saved-cards-container');
-    
-    // Функция случайной карточки
     const randomCardButton = document.querySelector('.random-card-button');
-    let savedCards = []; // массив для хранения сохраненных карточек
-    
-    // Добавьте переменные
     const usedCardsContainer = document.querySelector('.used-cards-container');
     const resetUsedBtn = document.querySelector('.reset-used-btn');
-    let usedCards = []; // массив использованных карточек
-    let cardCounter = 0; // счетчик карточек
-
+    const clearAllBtn = document.querySelector('.clear-all-btn');
+    
+    // Массивы данных
+    let savedCards = [];
+    let usedCards = [];
+    let cardCounter = 0;
+    
+    // Сохранение карточки
+    saveButton.addEventListener('click', function() {
+        const frontTextarea = document.querySelector('.card-front textarea');
+        const backTextarea = document.querySelector('.card-back textarea');
+        
+        const frontText = frontTextarea.value.trim();
+        const backText = backTextarea.value.trim();
+        
+        if (frontText || backText) {
+            savedCards.push({
+                front: frontText,
+                back: backText
+            });
+            
+            createMiniCard(frontText, backText);
+            
+            frontTextarea.value = '';
+            backTextarea.value = '';
+            
+            randomCardButton.disabled = false;
+        }
+    });
+    
+    // Случайная карточка
     randomCardButton.addEventListener('click', function() {
-        // Фильтруем неиспользованные карточки
         const availableCards = savedCards.filter((card, index) => !usedCards.includes(index));
         
         if (availableCards.length === 0) {
@@ -71,7 +91,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const randomIndex = Math.floor(Math.random() * availableCards.length);
         const selectedCard = availableCards[randomIndex];
         
-        // Находим оригинальный индекс в savedCards
         const originalIndex = savedCards.findIndex(card => 
             card.front === selectedCard.front && card.back === selectedCard.back
         );
@@ -82,51 +101,23 @@ document.addEventListener('DOMContentLoaded', function() {
         frontTextarea.value = selectedCard.front;
         backTextarea.value = selectedCard.back;
         
-        // Добавляем в использованные
         usedCards.push(originalIndex);
         createUsedMiniCard(selectedCard.front, selectedCard.back);
         
-        // Удаляем из сохраненных (визуально)
         const savedMiniCards = savedCardsContainer.children;
         let cardIndex = 0;
         for (let i = 0; i < savedMiniCards.length; i++) {
             if (cardIndex === originalIndex) {
-                savedMiniCards[i].style.display = 'none'; // скрываем карточку
+                savedMiniCards[i].style.display = 'none';
                 break;
             }
             cardIndex++;
         }
         
-        // Если карточка перевернута, поверните ее обратно
         card.classList.remove('flipped');
     });
-
-    saveButton.addEventListener('click', function() {
-        const frontTextarea = document.querySelector('.card-front textarea');
-        const backTextarea = document.querySelector('.card-back textarea');
-        
-        const frontText = frontTextarea.value.trim();
-        const backText = backTextarea.value.trim();
-        
-        if (frontText || backText) {
-            // Сохраняем в массив
-            savedCards.push({
-                front: frontText,
-                back: backText
-            });
-            
-            createMiniCard(frontText, backText);
-            
-            // Очистить основную карточку
-            frontTextarea.value = '';
-            backTextarea.value = '';
-            
-            // Активировать кнопку случайной карточки
-            randomCardButton.disabled = false;
-        }
-    });
     
-    // Обновите функцию createMiniCard для добавления нумерации
+    // Создание мини-карточки
     function createMiniCard(frontText, backText) {
         cardCounter++;
         const miniCard = document.createElement('div');
@@ -141,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="mini-card-label">Она</div>
                 <div class="mini-card-text">${frontText || 'Пусто'}</div>
             </div>
-            <div class="divider">Но</div>
+            <div class="divider"></div>
             <div class="mini-card-side mini-card-back">
                 <button class="clear-side-btn" onclick="clearSide(this)">C</button>
                 <div class="mini-card-label">Он</div>
@@ -151,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         savedCardsContainer.appendChild(miniCard);
     }
-
-    // Функция создания мини-карточки в использованных
+    
+    // Создание использованной мини-карточки
     function createUsedMiniCard(frontText, backText) {
         const miniCard = document.createElement('div');
         miniCard.className = 'mini-card';
@@ -162,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="mini-card-label">Она</div>
                 <div class="mini-card-text">${frontText || 'Пусто'}</div>
             </div>
-            <div class="divider">Но</div>
+            <div class="divider"></div>
             <div class="mini-card-side mini-card-back">
                 <div class="mini-card-label">Он</div>
                 <div class="mini-card-text">${backText || 'Пусто'}</div>
@@ -172,13 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
         usedCardsContainer.appendChild(miniCard);
     }
     
-    function deleteMiniCard(element) {
-        element.parentElement.remove();
-    }
-    
-    // Функция удаления всех карточек
-    const clearAllBtn = document.querySelector('.clear-all-btn');
-    
+    // Удаление всех карточек
     clearAllBtn.addEventListener('click', function() {
         if (confirm('Вы уверены, что хотите удалить все карточки?')) {
             savedCardsContainer.innerHTML = '';
@@ -189,11 +174,10 @@ document.addEventListener('DOMContentLoaded', function() {
             randomCardButton.disabled = true;
         }
     });
-
-    // Функция сброса использованных карточек
+    
+    // Сброс использованных карточек
     resetUsedBtn.addEventListener('click', function() {
         if (confirm('Сбросить все использованные карточки?')) {
-            // Показываем все скрытые карточки в сохраненных
             const savedMiniCards = savedCardsContainer.children;
             for (let i = 0; i < savedMiniCards.length; i++) {
                 savedMiniCards[i].style.display = 'block';
@@ -203,42 +187,38 @@ document.addEventListener('DOMContentLoaded', function() {
             usedCardsContainer.innerHTML = '';
         }
     });
-
-    // Глобальная функция для удаления одной карточки
+    
+    // Глобальные функции
     window.deleteMiniCard = function(element) {
         const miniCard = element.closest('.mini-card');
         if (confirm('Удалить эту карточку?')) {
             const index = Array.from(savedCardsContainer.children).indexOf(miniCard);
-            savedCards.splice(index, 1); // удаляем из массива
+            savedCards.splice(index, 1);
             miniCard.remove();
             
-            // Деактивируем кнопку если карточек не осталось
             if (savedCards.length === 0) {
                 randomCardButton.disabled = true;
             }
         }
     };
-
-    // Функция очистки одной стороны
+    
     window.clearSide = function(element) {
         const textElement = element.parentElement.querySelector('.mini-card-text');
         if (confirm('Очистить текст этой стороны?')) {
             textElement.textContent = 'Пусто';
         }
     };
-
+    
     // Изначально деактивируем кнопку
     randomCardButton.disabled = true;
-
-    // Хоткеи
+    
+    // Горячие клавиши
     document.addEventListener('keydown', function(event) {
-        // Если нажат Escape и фокус на textarea - убираем фокус
         if (event.key === 'Escape' && event.target.tagName === 'TEXTAREA') {
-            event.target.blur(); // убираем фокус с textarea
+            event.target.blur();
             return;
         }
         
-        // Проверяем, что фокус не на textarea (чтобы не мешать печатанию)
         if (event.target.tagName === 'TEXTAREA') {
             return;
         }
@@ -247,19 +227,18 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'Enter':
             case 's':
             case 'S':
-            case 'ы':  // русская 's'
+            case 'ы':
                 event.preventDefault();
                 saveButton.click();
                 break;
                 
-            case ' ':  // пробел
+            case ' ':
             case 'f':
             case 'F':
-            case 'а':  // русская 'f'
+            case 'а':
                 event.preventDefault();
                 card.classList.toggle('flipped');
                 
-                // Автоматически фокусируемся на textarea активной стороны при хоткее
                 setTimeout(() => {
                     if (card.classList.contains('flipped')) {
                         const backTextarea = document.querySelector('.card-back textarea');
@@ -273,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
             case 'r':
             case 'R':
-            case 'к':  // русская 'r'
+            case 'к':
                 event.preventDefault();
                 randomCardButton.click();
                 break;
@@ -281,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
             case 'Delete':
             case 'd':
             case 'D':
-            case 'в':  // русская 'd'
+            case 'в':
                 event.preventDefault();
                 if (confirm('Удалить все сохраненные карточки?')) {
                     clearAllBtn.click();
