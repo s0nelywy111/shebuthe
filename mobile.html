@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Card Game Mobile</title>
+    <link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+    <div class="mobile-header">
+        <h1>🎴 Card Game</h1>
+        <a href="index.html" class="desktop-link">💻 Полная версия</a>
+    </div>
+
+    <div class="mobile-container">
+        <div class="card" id="main-card">
+            <div class="card-face card-front">
+                <div class="card-header">
+                    <h2>💗 Она</h2>
+                </div>
+                <textarea id="front-textarea" placeholder="Что она делает?" maxlength="300"></textarea>
+            </div>
+            <div class="card-face card-back">
+                <div class="card-header">
+                    <h2>💙 Он</h2>
+                </div>
+                <textarea id="back-textarea" placeholder="Что он делает?" maxlength="300"></textarea>
+            </div>
+        </div>
+        
+        <div class="mobile-controls">
+            <button class="btn flip-btn" id="flip-btn">🔄 Повернуть</button>
+            <button class="btn save-btn" id="save-btn">💾 Сохранить</button>
+            <button class="btn random-btn" id="random-btn" disabled>🎲 Случайная</button>
+        </div>
+        
+        <div class="stats">
+            <span>📚 Сохранено: <span id="saved-count">0</span></span>
+            <span>✅ Изучено: <span id="used-count">0</span></span>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="saved">📚 Сохраненные</button>
+            <button class="tab-btn" data-tab="used">✅ Изученные</button>
+        </div>
+        
+        <div class="tab-content">
+            <div class="tab-pane active" id="saved-tab">
+                <div class="saved-list" id="saved-container">
+                    <div class="empty-state">
+                        <p>📝 Пока нет сохраненных карточек</p>
+                        <small>Создайте первую карточку!</small>
+                    </div>
+                </div>
+                <button class="btn danger-btn" id="clear-all-btn" style="display: none;">🗑️ Удалить все</button>
+            </div>
+            
+            <div class="tab-pane" id="used-tab">
+                <div class="used-list" id="used-container">
+                    <div class="empty-state">
+                        <p>🎯 Пока нет изученных карточек</p>
+                        <small>Используйте "Случайная карточка"</small>
+                    </div>
+                </div>
+                <button class="btn primary-btn" id="reset-used-btn" style="display: none;">↩️ Сбросить изученные</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="mobile.js"></script>
+</body>
+</html>
